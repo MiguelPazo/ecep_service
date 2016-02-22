@@ -2,11 +2,7 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-try {
-    (new Dotenv\Dotenv(__DIR__ . '/../'))->load();
-} catch (Dotenv\Exception\InvalidPathException $e) {
-    //
-}
+Dotenv::load(__DIR__ . '/../');
 
 /*
 |--------------------------------------------------------------------------
@@ -14,14 +10,12 @@ try {
 |--------------------------------------------------------------------------
 |
 | Here we will load the environment and create the application instance
-| that serves as the central piece of this framework. We'll use this
+| that servers as the central piece of the framework. We'll use this
 | application as an "IoC" container and router for this framework.
 |
 */
 
-$app = new Laravel\Lumen\Application(
-    realpath(__DIR__ . '/../')
-);
+$app = new Laravel\Lumen\Application;
 
 $app->withFacades();
 
@@ -39,13 +33,13 @@ $app->withEloquent();
 */
 
 $app->singleton(
-    Illuminate\Contracts\Debug\ExceptionHandler::class,
-    App\Exceptions\Handler::class
+    'Illuminate\Contracts\Debug\ExceptionHandler',
+    'App\Exceptions\Handler'
 );
 
 $app->singleton(
-    Illuminate\Contracts\Console\Kernel::class,
-    App\Console\Kernel::class
+    'Illuminate\Contracts\Console\Kernel',
+    'App\Console\Kernel'
 );
 
 /*
@@ -59,12 +53,16 @@ $app->singleton(
 |
 */
 
-// $app->middleware([
-//    App\Http\Middleware\ExampleMiddleware::class
-// ]);
+$app->middleware([
+    'Illuminate\Cookie\Middleware\EncryptCookies',
+    'Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse',
+    'Illuminate\Session\Middleware\StartSession',
+    'Illuminate\View\Middleware\ShareErrorsFromSession',
+//    'Laravel\Lumen\Http\Middleware\VerifyCsrfToken',
+]);
 
 // $app->routeMiddleware([
-//     'auth' => App\Http\Middleware\Authenticate::class,
+
 // ]);
 
 /*
@@ -78,9 +76,8 @@ $app->singleton(
 |
 */
 
- $app->register(Illuminate\Redis\RedisServiceProvider::class);
-// $app->register(App\Providers\AuthServiceProvider::class);
-// $app->register(App\Providers\EventServiceProvider::class);
+$app->register('App\Providers\AppServiceProvider');
+//$app->register('Illuminate\Session\SessionServiceProvider');
 
 /*
 |--------------------------------------------------------------------------
@@ -93,8 +90,6 @@ $app->singleton(
 |
 */
 
-$app->group(['namespace' => 'App\Http\Controllers'], function ($app) {
-    require __DIR__ . '/../app/Http/routes.php';
-});
+require __DIR__ . '/../app/Http/routes.php';
 
 return $app;

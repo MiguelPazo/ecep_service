@@ -5,14 +5,10 @@
     "license": "MIT",
     "type": "project",
     "require": {
-        "php": ">=5.5.9",
-        "laravel/lumen-framework": "5.2.*",
-        "vlucas/phpdotenv": "~2.2",
-        "predis/predis": "^1.0",
-        "illuminate/redis": "^5.2"
+        "laravel/lumen-framework": "5.0.*",
+        "vlucas/phpdotenv": "~1.0"
     },
     "require-dev": {
-        "fzaninotto/faker": "~1.4",
         "phpunit/phpunit": "~4.0"
     },
     "autoload": {
@@ -22,8 +18,10 @@
     },
     "autoload-dev": {
         "classmap": [
-            "tests/",
-            "database/"
+            "tests/"
         ]
+    },
+    "config": {
+        "preferred-install": "dist"
     }
 }
